@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Travel UK Group</title>
+        <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600&display=swap" rel="stylesheet" />
+        <style>
+body {
+    background-color: #0d1630;
+    color: #f5f0e8;
+    font-family: 'Barlow', sans-serif;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-left: 4px solid #e8610a;
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+  h1 {
+    font-weight: 700;
+    font-size: 3rem;
+}
+h2 {
+    font-weight: 600;
+    color: #e8610a;
+}
+
+h3 {
+    font-weight: 600;
+    color: #6e8fff;
+}
+
+a {
+    color: #c8102e;
+}
+footer {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: #888;
+}
+.btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.6rem 1.4rem;
+  background-color: #c8102e;
+  color: #f5f0e8;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+
+.btn:hover {
+  background-color: #a50d26;
+}
+</style>
+    </head>
+    <body>
+        <h1>Travel UK Group</h1>
+        <p>Proudly serving London, the North West and everywhere inbetween</p>
+        <h2>Operating <span id="routes">0</span> routes with <span id="vehicles">0</span> coaches, buses, trains and trams in <span id="towns">0</span> towns and cities</h2>
+        <a class="btn" href="https://www.mybustimes.cc/group/Travel%20UK%20Group/">View our group on MyBusTimes.cc</a>
+        <h2>Our Companies:</h2>
+
+        <div class="card">
+        <h3>Travel North West</h3>
+        <p>Our flagship bus operation serving communities across the North West with 59 routes, 673 buses and counting</p>
+        <a class="btn" href="https://www.mybustimes.cc/operator/travel-north-west">View company page</a>
+        </div>
+
+        <div class="card">
+        <h3>Travel UK Coaches</h3>
+        <p>Long-distance and express coach services across the United Kingdom. 6 routes, 60 coaches moving you from airport to airport, city to city, 24/7</p>
+        <a class="btn" href="https://www.mybustimes.cc/operator/travel-uk-coaches">View company page</a>
+        </div>
+
+        <div class="card">
+        <h3>Travel North West Rail</h3>
+        <p>Rail services providing fast links from everything between major city centres and quiet local towns. 373 trains and trams getting you where you need to be</p>
+        <a class="btn" href="https://www.mybustimes.cc/operator/travel-north-west-rail">View company page</a>
+        </div>
+        <script>
+        function countUp(id, target, duration) {
+            const el = document.getElementById(id);
+            const steps = 60;
+            const increment = target / steps;
+            let current = 0;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    el.textContent = target.toLocaleString();
+                    clearInterval(timer);
+                } else {
+                    el.textContent = Math.floor(current).toLocaleString();
+                }
+            }, duration / steps);
+        }
+        fetch("stats.json")
+            .then(response => response.json())
+            .then(data => {
+                countUp("routes", data.routes, 4000);
+                countUp("vehicles", data.vehicles, 3000);
+                countUp("towns", data.towns, 2000);
+            })
+            .catch(error => console.error("Error loading stats:", error));
+        </script>
+        <footer>
+            <p>This is not a real transport operator, not related to any real life companies and should not be used to help plan any journeys.</p>
+            <p>For questions, route or vehicle requests, contact us at travelukgroup@protonmail.com.</p>
+        </footer>
+    </body>
+</html>
