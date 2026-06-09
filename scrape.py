@@ -20,7 +20,8 @@ for item in items:
 
 data = {
     "vehicles": vehicles,
-    "routes": routes
+    "routes": routes,
+    "towns": 20
 }
 
 with open("stats.json", "w") as f:
