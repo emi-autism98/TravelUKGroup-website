@@ -65,25 +65,25 @@ footer {
     <body>
         <h1>Travel UK Group</h1>
         <p>Proudly serving London, the North West and everywhere inbetween</p>
-        <h2>Operating <span id="routes">0</span> routes with <span id="vehicles">0</span> coaches, buses, trains and trams in <span id="towns">0</span> towns and cities</h2>
+        <h2>Operating <span id="TUKGroutes">0</span> routes with <span id="TUKGvehicles">0</span> coaches, buses, trains and trams in <span id="towns">0</span> towns and cities</h2>
         <a class="btn" href="https://www.mybustimes.cc/group/Travel%20UK%20Group/">View our group on MyBusTimes.cc</a>
         <h2>Our Companies:</h2>
 
         <div class="card">
         <h3>Travel North West</h3>
-        <p>Our flagship bus operation serving communities across the North West with 59 routes, 673 buses and counting</p>
+        <p>Our flagship bus operation serving communities across the North West with <span id="TNWroutes">0</span> routes, <span id="TNWvehicles">0</span> buses and counting</p>
         <a class="btn" href="https://www.mybustimes.cc/operator/travel-north-west">View company page</a>
         </div>
 
         <div class="card">
         <h3>Travel UK Coaches</h3>
-        <p>Long-distance and express coach services across the United Kingdom. 6 routes, 60 coaches moving you from airport to airport, city to city, 24/7</p>
+        <p>Long-distance and express coach services across the United Kingdom. <span id="TUKCOroutes">0</span> routes, <span id="TUKCOvehicles">0</span> coaches moving you from airport to airport, city to city, 24/7</p>
         <a class="btn" href="https://www.mybustimes.cc/operator/travel-uk-coaches">View company page</a>
         </div>
 
         <div class="card">
         <h3>Travel North West Rail</h3>
-        <p>Rail services providing fast links from everything between major city centres and quiet local towns. 373 trains and trams getting you where you need to be</p>
+        <p>Rail services providing fast links from everything between major city centres and quiet local towns. <span id="TNWRroutes">0</span> trains and trams getting you where you need to be</p>
         <a class="btn" href="https://www.mybustimes.cc/operator/travel-north-west-rail">View company page</a>
         </div>
         <script>
@@ -105,9 +105,15 @@ footer {
         fetch("stats.json")
             .then(response => response.json())
             .then(data => {
-                countUp("routes", data.routes, 4000);
-                countUp("vehicles", data.vehicles, 3000);
+                countUp("TUKGroutes", data.routes_TUKG, 2000);
+                countUp("TUKGvehicles", data.vehicles_TUKG, 2000);
                 countUp("towns", 20, 2000);
+                countUp("TNWroutes", data.routes_TNW, 2000);
+                countUp("TNWvehicles", data.vehicles_TNW, 2000);
+                countUp("TUKCOroutes", data.routes_TUKC, 2000);
+                countUp("TUKCOvehicles", data.vehicles_TUKC, 2000);
+                countUp("TNWRroutes", data.routes_TNWR, 2000);
+                countUp("TNWRvehicles", data.vehicles_TNWR, 2000);
             })
             .catch(error => console.error("Error loading stats:", error));
         </script>
