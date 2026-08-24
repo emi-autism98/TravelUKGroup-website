@@ -2,118 +2,72 @@ import requests
 from bs4 import BeautifulSoup
 import json
 
-urlTUKG = "https://www.mybustimes.cc/group/Travel%20UK%20Group/"
-urlTNW = "https://www.mybustimes.cc/operator/travel-north-west/"
-urlTUKC = "https://www.mybustimes.cc/operator/travel-uk-coaches/"
-urlTNWR = "https://www.mybustimes.cc/operator/travel-north-west-rail/"
-urlTNWM = "https://www.mybustimes.cc/operator/merseytravel-metro-travel-north-west/"
+# Setup URLs
+urls = {
+    "TUKG": "https://mybustimes.cc",
+    "TNW": "https://mybustimes.cc",
+    "TUKC": "https://mybustimes.cc",
+    "TNWR": "https://mybustimes.cc",
+    "TNWM": "https://mybustimes.cc"
+}
 
-routesTUKG = None
-routesTNW = None
-routesTUKC = None
-routesTNWR = None
-routesTNWM = None
-vehiclesTUKG = None
-vehiclesTNW = None
-vehiclesTUKC = None
-vehiclesTNWR = None
-vehiclesTNWM = None
+veh_urls = {
+    "TNW": "https://mybustimes.ccvehicles/",
+    "TUKC": "https://mybustimes.ccvehicles/",
+    "TNWR": "https://mybustimes.ccvehicles/",
+    "TNWM": "https://mybustimes.ccvehicles/"
+}
 
-responseTUKG = requests.get(urlTUKG)
-responseTNW = requests.get(urlTNW)
-responseTUKC = requests.get(urlTUKC)
-responseTNWR = requests.get(urlTNWR)
-responseTNWM = requests.get(urlTNWM)
+# Helper function to scrape a single metric safely
+def get_metric(url, keyword):
+    try:
+        response = requests.get(url, timeout=10)
+        if response.status_code != 200:
+            return 0
+        
+        soup = BeautifulSoup(response.text, "html.parser")
+        for item in soup.find_all("li"):
+            content = item.get_text().lower()
+            if keyword in content:
+                # Extract only digits from the item string
+                num_str = "".join([c for c in content.split()[0] if c.isdigit() or c == ','])
+                return int(num_str.replace(",", "")) if num_str else 0
+    except Exception as e:
+        print(f"Error scraping {url} for {keyword}: {e}")
+    return 0
 
-soupTUKG = BeautifulSoup(responseTUKG.text, "html.parser")
-itemsTUKG = soupTUKG.find_all("li")
-for item in itemsTUKG:
-    content = item.get_text()
-    if "routes" in content:
-        routesTUKG = int(content.split()[0].replace(",", ""))
-    if "vehicles" in content:
-        vehiclesTUKG = int(content.split()[0].replace(",", ""))
+# Extract data with safe defaults (0 instead of None)
+routes_TUKG = get_metric(urls["TUKG"], "routes")
+vehicles_TUKG = get_metric(urls["TUKG"], "vehicles")
 
-soupTNW = BeautifulSoup(responseTNW.text, "html.parser")
-itemsTNW = soupTNW.find_all("li")
-for item in itemsTNW:
-    content = item.get_text()
-    if "routes" in content:
-        routesTNW = int(content.split()[0].replace(",", ""))
+routes_TNW = get_metric(urls["TNW"], "routes")
+routes_TUKC = get_metric(urls["TUKC"], "routes")
+routes_TNWR = get_metric(urls["TNWR"], "routes")
+routes_TNWM = get_metric(urls["TNWM"], "routes")
 
-soupTUKC = BeautifulSoup(responseTUKC.text, "html.parser")
-itemsTUKC = soupTUKC.find_all("li")
-for item in itemsTUKC:
-    content = item.get_text()
-    if "routes" in content:
-        routesTUKC = int(content.split()[0].replace(",", ""))
+vehicles_TNW = get_metric(veh_urls["TNW"], "vehicles")
+vehicles_TUKC = get_metric(veh_urls["TUKC"], "vehicles")
+vehicles_TNWR = get_metric(veh_urls["TNWR"], "vehicles")
+vehicles_TNWM = get_metric(veh_urls["TNWM"], "vehicles")
 
-soupTNWR = BeautifulSoup(responseTNWR.text, "html.parser")
-itemsTNWR = soupTNWR.find_all("li")
-for item in itemsTNWR:
-    content = item.get_text()
-    if "routes" in content:
-        routesTNWR = int(content.split()[0].replace(",", ""))
+# Add combined regional metrics safely
+routes_TNW += routes_TNWM
+vehicles_TNW += vehicles_TNWM
 
-soupTNWM = BeautifulSoup(responseTNWM.text, "html.parser")
-itemsTNWM = soupTNWM.find_all("li")
-for item in itemsTNWM:
-    content = item.get_text()
-    if "routes" in content:
-        routesTNWM = int(content.split()[0].replace(",", ""))
-
-vehUrlTNW = "https://www.mybustimes.cc/operator/travel-north-west/vehicles/"
-vehUrlTUKC = "https://www.mybustimes.cc/operator/travel-uk-coaches/vehicles/"
-vehUrlTNWR = "https://www.mybustimes.cc/operator/travel-north-west-rail/vehicles/"
-vehUrlTNWM = "https://www.mybustimes.cc/operator/merseytravel-metro-travel-north-west/vehicles/"
-
-vehResponseTNW = requests.get(vehUrlTNW)
-vehResponseTUKC = requests.get(vehUrlTUKC)
-vehResponseTNWR = requests.get(vehUrlTNWR)
-vehResponseTNWM = requests.get(vehUrlTNWM)
-
-soupVehTNW = BeautifulSoup(vehResponseTNW.text, "html.parser")
-itemsVehTNW = soupVehTNW.find_all("li")
-for item in itemsVehTNW:
-    content = item.get_text()
-    if "vehicles" in content:
-        vehiclesTNW = int(content.split()[0].replace(",", ""))
-
-soupVehTUKC = BeautifulSoup(vehResponseTUKC.text, "html.parser")
-itemsVehTUKC = soupVehTUKC.find_all("li")
-for item in itemsVehTUKC:
-    content = item.get_text()
-    if "vehicles" in content:
-        vehiclesTUKC = int(content.split()[0].replace(",", ""))
-
-soupVehTNWR = BeautifulSoup(vehResponseTNWR.text, "html.parser")
-itemsVehTNWR = soupVehTNWR.find_all("li")
-for item in itemsVehTNWR:
-    content = item.get_text()
-    if "vehicles" in content:
-        vehiclesTNWR = int(content.split()[0].replace(",", ""))
-
-soupVehTNWM = BeautifulSoup(vehResponseTNWM.text, "html.parser")
-itemsVehTNWM = soupVehTNWM.find_all("li")
-for item in itemsVehTNWM:
-    content = item.get_text()
-    if "vehicles" in content:
-        vehiclesTNWM = int(content.split()[0].replace(",", ""))
-
-routesTNW = int(routesTNW) + int(routesTNWM)
-vehiclesTNW = int(vehiclesTNW) + int(vehiclesTNWM)
-
+# Construct final payload
 data = {
-    "routes_TUKG": routesTUKG,
-    "routes_TNW": routesTNW,
-    "routes_TUKC": routesTUKC,
-    "routes_TNWR": routesTNWR,
-    "vehicles_TUKG": vehiclesTUKG,
-    "vehicles_TNW": vehiclesTNW,
-    "vehicles_TUKC": vehiclesTUKC,
-    "vehicles_TNWR": vehiclesTNWR,
-    "towns": 20 # Not really scrapable unless I add a directory of every single town which is NOT happening, I'll just count this part whenever I remember
+    "routes_TUKG": routes_TUKG,
+    "routes_TNW": routes_TNW,
+    "routes_TUKC": routes_TUKC,
+    "routes_TNWR": routes_TNWR,
+    "vehicles_TUKG": vehicles_TUKG,
+    "vehicles_TNW": vehicles_TNW,
+    "vehicles_TUKC": vehicles_TUKC,
+    "vehicles_TNWR": vehicles_TNWR,
+    "towns": 20 
 }
 
 with open("stats.json", "w") as f:
-    json.dump(data, f)
+    json.dump(data, f, indent=4)
+
+print("Scraping completed and stats.json saved.")
