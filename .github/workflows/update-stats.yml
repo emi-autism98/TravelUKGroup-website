@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
 
+# Add this global variable to force the runner UI to stop complaining
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -15,6 +16,7 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
+      # Specific patch release to completely decouple from Node 20 metadata
       - name: Checkout repository
         uses: actions/checkout@v4.2.2
 
@@ -34,6 +36,5 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add stats.json
-          # The || true prevents the script from crashing if stats.json hasn't changed
           git commit -m "Auto update stats" || true 
           git push
