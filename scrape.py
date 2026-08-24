@@ -100,8 +100,8 @@ for item in itemsVehTNWM:
     if "vehicles" in content:
         vehiclesTNWM = int(content.split()[0].replace(",", ""))
 
-routesTNW = routesTNW + routesTNWM
-vehiclesTNW = vehiclesTNW + vehiclesTNWM
+routesTNW = int(routesTNW) + int(routesTNWM)
+vehiclesTNW = int(vehiclesTNW) + int(vehiclesTNWM)
 
 data = {
     "routes_TUKG": routesTUKG,
