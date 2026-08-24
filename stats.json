@@ -1,1 +1,11 @@
-{"routes_TUKG": null, "routes_TNW": null, "routes_TUKC": null, "routes_TNWR": null, "vehicles_TUKG": null, "vehicles_TNW": null, "vehicles_TUKC": null, "vehicles_TNWR": null, "towns": 20}
+{
+    "routes_TUKG": 0,
+    "routes_TNW": 0,
+    "routes_TUKC": 0,
+    "routes_TNWR": 0,
+    "vehicles_TUKG": 0,
+    "vehicles_TNW": 0,
+    "vehicles_TUKC": 0,
+    "vehicles_TNWR": 0,
+    "towns": 20
+}
