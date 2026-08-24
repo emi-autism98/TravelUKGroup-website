@@ -8,9 +8,9 @@ on:
 permissions:
   contents: write
 
-# Add this global variable to force the runner UI to stop complaining
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
 jobs:
   update:
